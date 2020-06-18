@@ -1,16 +1,12 @@
 ---
 - name: Deploy code
   gather_facts: yes
-  hosts: webserver
+  hosts: "{{ groups }}"
   vars_files:
     - vm_vars.yml
   
   tasks:
-    - name: instalacion de servicio HTTPD
-      yum:
-        name: httpd
-        status: present
-    
+   
     - name: Comprobando que exista el directorio
       file:
         dest: "{{ git_folder }}"
