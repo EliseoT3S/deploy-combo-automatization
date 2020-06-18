@@ -1,6 +1,6 @@
 ---
 - name: Deploy code
-  gather_facts: no
+  gather_facts: yes
   hosts: webserver
   vars_files:
     - vm_vars.yml
