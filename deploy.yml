@@ -1,0 +1,43 @@
+---
+- name: Deploy code
+  gather_facts: no
+  hosts: develop
+  vars_files:
+    - vm_vars.yml
+  
+  tasks:
+    - name: instalacion de servicio HTTPD
+      yum:
+        name: httpd
+        status: present
+    
+    - name: Comprobando que exista el directorio
+      file:
+        dest: "{{ git_folder }}"
+        state: directory
+        mode: "u=rwx,g=rx,o=rx"
+        recurse: yes        
+
+    - stat:
+        path: "{{ git_folder }}/index.html"
+      register: st
+
+    - name: Clone git
+      git:
+        repo: 'https://github.com/EliseoT3S/combo.automatization-web.git'
+        dest: "{{ git_folder }}"
+        clone: yes
+      when: not st.stat.exists
+    
+    - name: Update code
+      git:
+        repo: 'https://github.com/EliseoT3S/combo.automatization-web.git'
+        dest: "{{ git_folder }}"
+        update: yes
+        force: yes
+
+    - name: Habilitar httpd
+      service:
+        name: httpd
+        state: restarted
+        enabled: true
