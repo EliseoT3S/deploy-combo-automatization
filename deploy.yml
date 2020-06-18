@@ -1,7 +1,7 @@
 ---
 - name: Deploy code
   gather_facts: yes
-  hosts: "{{ groups }}"
+  hosts: webserver
   vars_files:
     - vm_vars.yml
   
